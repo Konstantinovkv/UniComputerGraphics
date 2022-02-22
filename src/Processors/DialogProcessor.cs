@@ -62,7 +62,22 @@ namespace Draw
 
 			ShapeList.Add(rect);
 		}
-		
+
+		/// <summary>
+		/// Добавя примитив - елипса на произволно място върху клиентската област.
+		/// </summary>
+		public void AddRandomEllipse()
+		{
+			Random rnd = new Random();
+			int x = rnd.Next(100, 1000);
+			int y = rnd.Next(100, 600);
+
+			EllipseShape elipse = new EllipseShape(new Rectangle(x, y, 100, 200));
+			elipse.FillColor = Color.White;
+
+			ShapeList.Add(elipse);
+		}
+
 		/// <summary>
 		/// Проверява дали дадена точка е в елемента.
 		/// Обхожда в ред обратен на визуализацията с цел намиране на
