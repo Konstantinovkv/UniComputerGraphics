@@ -73,9 +73,16 @@ namespace Draw
 			get { return fillColor; }
 			set { fillColor = value; }
 		}
-		
+
+		private Color strokeColor;
+		public virtual Color StrokeColor
+		{
+			get { return strokeColor; }
+			set { strokeColor = value; }
+		}
+
 		#endregion
-		
+
 
 		/// <summary>
 		/// Проверка дали точка point принадлежи на елемента.

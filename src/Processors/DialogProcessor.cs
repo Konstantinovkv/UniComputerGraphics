@@ -72,10 +72,11 @@ namespace Draw
 			int x = rnd.Next(100, 1000);
 			int y = rnd.Next(100, 600);
 
-			EllipseShape elipse = new EllipseShape(new Rectangle(x, y, 100, 200));
-			elipse.FillColor = Color.White;
+			EllipseShape ellipse = new EllipseShape(new Rectangle(x, y, 100, 200));
+			ellipse.FillColor = Color.White;
+			ellipse.StrokeColor = Color.Red;
 
-			ShapeList.Add(elipse);
+			ShapeList.Add(ellipse);
 		}
 
 		/// <summary>
