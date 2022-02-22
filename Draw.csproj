@@ -74,6 +74,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="src\GUI\resources\color.png" />
     <Content Include="src\GUI\resources\line.png" />
     <Content Include="src\GUI\resources\pngegg.png" />
     <Content Include="src\GUI\resources\point.png" />
