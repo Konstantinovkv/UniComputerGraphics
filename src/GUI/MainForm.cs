@@ -124,5 +124,24 @@ namespace Draw
 
 			viewPort.Invalidate();
 		}
+
+        private void colorDialog(object sender, EventArgs e)
+        {
+			if (colorDialog1.ShowDialog() == DialogResult.OK)
+			{
+				if (dialogProcessor.Selection != null)
+				{
+					try
+					{
+						dialogProcessor.Selection.FillColor = colorDialog1.Color;
+					}
+					catch (NullReferenceException)
+					{
+						Console.WriteLine("Nothing to fill.");
+					}
+					viewPort.Invalidate();
+				}
+            }
+        }
     }
 }
