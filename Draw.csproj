@@ -76,5 +76,6 @@
   <ItemGroup>
     <Content Include="src\GUI\resources\line.png" />
     <Content Include="src\GUI\resources\pngegg.png" />
+    <Content Include="src\GUI\resources\point.png" />
   </ItemGroup>
 </Project>

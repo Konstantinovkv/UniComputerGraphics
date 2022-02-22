@@ -28,7 +28,7 @@ namespace Draw
 
 		public override void DrawSelf(Graphics grfx)
 		{
-			Brush aBrush = (Brush)Brushes.Red;
+			Brush aBrush = (Brush)Brushes.Black;
 			grfx.FillRectangle(aBrush, this.Location.X, this.Location.Y, 3, 3);
 		}
 	}
