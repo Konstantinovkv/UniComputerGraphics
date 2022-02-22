@@ -81,6 +81,13 @@ namespace Draw
 			set { strokeColor = value; }
 		}
 
+		private int strokeWidth;
+		public virtual int StrokeWidth
+		{
+			get { return strokeWidth; }
+			set { strokeWidth = value; }
+		}
+
 		#endregion
 
 

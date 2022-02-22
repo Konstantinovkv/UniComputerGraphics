@@ -39,7 +39,7 @@ namespace Draw
 		{
 			Point point1 = new Point((int)this.Location.X, (int)this.Location.Y);
 			Point point2 = Point.Add(point1, new Size(250, 0));
-			using (Pen pen = new Pen(StrokeColor, 1))
+			using (Pen pen = new Pen(StrokeColor, StrokeWidth))
 				grfx.DrawLine(pen, point1, point2);
 		}
 	}

@@ -59,6 +59,8 @@ namespace Draw
 			
 			RectangleShape rect = new RectangleShape(new Rectangle(x,y,100,200));
 			rect.FillColor = Color.White;
+			rect.StrokeColor = Color.Green;
+			rect.StrokeWidth = 1;
 
 			ShapeList.Add(rect);
 		}
@@ -74,7 +76,8 @@ namespace Draw
 
 			EllipseShape ellipse = new EllipseShape(new Rectangle(x, y, 100, 200));
 			ellipse.FillColor = Color.White;
-			ellipse.StrokeColor = Color.Red;
+			ellipse.StrokeColor = Color.Green;
+			ellipse.StrokeWidth = 1;
 
 			ShapeList.Add(ellipse);
 		}
@@ -90,6 +93,8 @@ namespace Draw
 
 			LineShape line = new LineShape(new Rectangle(x, y, 100, 200));
 			line.FillColor = Color.White;
+			line.StrokeWidth = 1;
+			line.StrokeColor = Color.Black;
 
 			ShapeList.Add(line);
 		}
@@ -102,6 +107,7 @@ namespace Draw
 
 			PointShape point = new PointShape(new Rectangle(x, y, 100, 200));
 			point.FillColor = Color.White;
+			point.StrokeWidth = 1;
 
 			ShapeList.Add(point);
 		}

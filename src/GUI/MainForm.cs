@@ -143,5 +143,27 @@ namespace Draw
 				}
             }
         }
+
+        private void speedMenu_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+
+        }
+
+        private void numericUpDown1_ValueChanged(object sender, EventArgs e)
+        {
+			if (dialogProcessor.Selection != null)
+            {
+				try
+				{
+					dialogProcessor.Selection.StrokeWidth = (int)numericUpDown1.Value;
+					viewPort.Invalidate();
+				}
+				catch (NullReferenceException)
+				{
+					Console.WriteLine("Nothing to fill.");
+				}
+			}
+
+		}
     }
 }
