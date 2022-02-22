@@ -79,6 +79,21 @@ namespace Draw
 		}
 
 		/// <summary>
+		/// Добавя примитив - елипса на произволно място върху клиентската област.
+		/// </summary>
+		public void AddRandomLine()
+		{
+			Random rnd = new Random();
+			int x = rnd.Next(100, 1000);
+			int y = rnd.Next(100, 600);
+
+			LineShape line = new LineShape(new Rectangle(x, y, 100, 200));
+			line.FillColor = Color.White;
+
+			ShapeList.Add(line);
+		}
+
+		/// <summary>
 		/// Проверява дали дадена точка е в елемента.
 		/// Обхожда в ред обратен на визуализацията с цел намиране на
 		/// "най-горния" елемент т.е. този който виждаме под мишката.
