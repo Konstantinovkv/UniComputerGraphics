@@ -97,5 +97,14 @@ namespace Draw
 		{
 			dialogProcessor.IsDragging = false;
 		}
-	}
+
+        private void toolStripButton1_Click(object sender, EventArgs e)
+        {
+			dialogProcessor.AddRandomEllipse();
+
+			statusBar.Items[0].Text = "Последно действие: Рисуване на правоъгълник";
+
+			viewPort.Invalidate();
+		}
+    }
 }

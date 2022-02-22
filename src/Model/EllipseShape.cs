@@ -10,11 +10,11 @@ namespace Draw
 	{
 		#region Constructor
 
-		public EllipseShape(ElipseF ell) : base(ell)
+		public EllipseShape(RectangleF ell) : base(ell)
 		{
 		}
 
-		public EllipseShape(ElipseShape ellipse) : base(ellipse)
+		public EllipseShape(EllipseShape ellipse) : base(ellipse)
 		{
 		}
 
@@ -45,8 +45,8 @@ namespace Draw
 		{
 			base.DrawSelf(grfx);
 
-			grfx.FillEllipse(new SolidBrush(FillColor), Ellipse.X, Ellipse.Y, Ellipse.Width, Ellipse.Height);
-			grfx.DrawEllipse(Pens.Black, Ellipse.X, Ellipse.Y, Ellipse.Width, Ellipse.Height);
+			grfx.FillEllipse(new SolidBrush(FillColor), Rectangle.X, Rectangle.Y, Rectangle.Width, Rectangle.Height);
+			grfx.DrawEllipse(Pens.Black, Rectangle.X, Rectangle.Y, Rectangle.Width, Rectangle.Height);
 
 		}
 	}
