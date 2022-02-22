@@ -93,6 +93,18 @@ namespace Draw
 			ShapeList.Add(line);
 		}
 
+		public void AddRandomPoint()
+		{
+			Random rnd = new Random();
+			int x = rnd.Next(100, 1000);
+			int y = rnd.Next(100, 600);
+
+			PointShape point = new PointShape(new Rectangle(x, y, 100, 200));
+			point.FillColor = Color.White;
+
+			ShapeList.Add(point);
+		}
+
 		/// <summary>
 		/// Проверява дали дадена точка е в елемента.
 		/// Обхожда в ред обратен на визуализацията с цел намиране на

@@ -111,6 +111,15 @@ namespace Draw
         {
 			dialogProcessor.AddRandomLine();
 
+			statusBar.Items[0].Text = "Последно действие: Рисуване на линия";
+
+			viewPort.Invalidate();
+		}
+
+        private void DrawPointSpeedButtonClick(object sender, EventArgs e)
+        {
+			dialogProcessor.AddRandomPoint();
+
 			statusBar.Items[0].Text = "Последно действие: Рисуване на точка";
 
 			viewPort.Invalidate();
