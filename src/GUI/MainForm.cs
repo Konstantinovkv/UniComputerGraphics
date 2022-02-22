@@ -98,11 +98,20 @@ namespace Draw
 			dialogProcessor.IsDragging = false;
 		}
 
-        private void toolStripButton1_Click(object sender, EventArgs e)
+        private void DrawEllipseSpeedButtonClick(object sender, EventArgs e)
         {
 			dialogProcessor.AddRandomEllipse();
 
-			statusBar.Items[0].Text = "Последно действие: Рисуване на правоъгълник";
+			statusBar.Items[0].Text = "Последно действие: Рисуване на елипса";
+
+			viewPort.Invalidate();
+		}
+
+        private void DrawLineSpeedButtonClick(object sender, EventArgs e)
+        {
+			dialogProcessor.AddRandomLine();
+
+			statusBar.Items[0].Text = "Последно действие: Рисуване на точка";
 
 			viewPort.Invalidate();
 		}
