@@ -20,22 +20,30 @@ namespace Draw
 
 		#endregion
 
-		/// <summary>
-		/// Проверка за принадлежност на точка point към елипсата.
-		/// В случая на елипса този метод може да не бъде пренаписван, защото
-		/// Реализацията съвпада с тази на абстрактния клас Shape, който проверява
-		/// дали точката е в обхващащата елипса на елемента (а той съвпада с
-		/// елемента в този случай).
-		/// </summary>
+		
 		public override bool Contains(PointF point)
 		{
-			if (base.Contains(point))
-				// Проверка дали е в обекта само, ако точката е в обхващащата елипса.
-				// В случая на елипса - директно връщаме true
-				return true;
-			else
-				// Ако не е в обхващащата елипса, то неможе да е в обекта и => false
+			PointF center = new PointF(
+				  this.Location.X + (this.Width / 2),
+				  this.Location.Y + (this.Height / 2));
+
+			double _xRadius = this.Width / 2;
+			double _yRadius = this.Height / 2;
+
+
+			if (_xRadius <= 0.0 || _yRadius <= 0.0)
 				return false;
+			/* This is a more general form of the circle equation
+             *
+             * X^2/a^2 + Y^2/b^2 <= 1
+             */
+
+			PointF normalized = new PointF(point.X - center.X,
+										 point.Y - center.Y);
+
+			return ((double)(normalized.X * normalized.X)
+					 / (_xRadius * _xRadius)) + ((double)(normalized.Y * normalized.Y) / (_yRadius * _yRadius))
+				<= 1.0;
 		}
 
 		/// <summary>
