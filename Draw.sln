@@ -1,7 +1,8 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 9.00
-# Visual Studio 2005
-# SharpDevelop 2.2.1.2648
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31729.503
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Draw", "Draw.csproj", "{B7A9A968-DE7B-4537-9423-9D8ED1A72BF9}"
 EndProject
 Global
@@ -10,9 +11,15 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{B7A9A968-DE7B-4537-9423-9D8ED1A72BF9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B7A9A968-DE7B-4537-9423-9D8ED1A72BF9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B7A9A968-DE7B-4537-9423-9D8ED1A72BF9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B7A9A968-DE7B-4537-9423-9D8ED1A72BF9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B7A9A968-DE7B-4537-9423-9D8ED1A72BF9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B7A9A968-DE7B-4537-9423-9D8ED1A72BF9}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {53731482-044A-4DAA-8DFB-FAB260F243B0}
 	EndGlobalSection
 EndGlobal
