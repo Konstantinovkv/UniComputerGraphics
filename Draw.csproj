@@ -78,5 +78,6 @@
     <Content Include="src\GUI\resources\line.png" />
     <Content Include="src\GUI\resources\pngegg.png" />
     <Content Include="src\GUI\resources\point.png" />
+    <Content Include="src\GUI\resources\strokeColor.png" />
   </ItemGroup>
 </Project>

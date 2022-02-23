@@ -28,8 +28,8 @@ namespace Draw
 
 		public override void DrawSelf(Graphics grfx)
 		{
-			
-			Brush aBrush = (Brush)Brushes.Black;
+
+			SolidBrush aBrush = new SolidBrush(StrokeColor);
 			grfx.FillRectangle(aBrush, this.Location.X, this.Location.Y, 3, 3);
 		}
 	}
