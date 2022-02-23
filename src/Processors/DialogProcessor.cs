@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 
 namespace Draw
@@ -26,7 +27,17 @@ namespace Draw
 			get { return selection; }
 			set { selection = value; }
 		}
-		
+
+		/// <summary>
+		/// Избрани елементи.
+		/// </summary>
+		private List<Shape> multipleSelection = new List<Shape>();
+		public List<Shape> MultipleSelection
+		{
+			get { return multipleSelection; }
+			set { multipleSelection = value; }
+		}
+
 		/// <summary>
 		/// Дали в момента диалога е в състояние на "влачене" на избрания елемент.
 		/// </summary>
@@ -49,6 +60,11 @@ namespace Draw
 		#endregion
 
 		private Color defaultFillColor = Color.White;
+		public Color DefaultFillColor
+		{
+			get { return defaultFillColor; }
+			set { defaultFillColor = value; }
+		}
 		private Color defaultStrokeColor = Color.Black;
 
 		/// <summary>

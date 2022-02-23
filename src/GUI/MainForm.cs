@@ -74,6 +74,17 @@ namespace Draw
 					viewPort.Invalidate();
 				}
 			}
+			if (toolStripButton6.Checked)
+			{
+				dialogProcessor.MultipleSelection.Add(dialogProcessor.ContainsPoint(e.Location));
+				if (dialogProcessor.MultipleSelection.Count != 0)
+				{
+					statusBar.Items[0].Text = "Последно действие: Селекция на примитиви";
+					dialogProcessor.IsDragging = true;
+					dialogProcessor.LastLocation = e.Location;
+					viewPort.Invalidate();
+				}
+			}
 		}
 
 		/// <summary>
@@ -185,6 +196,26 @@ namespace Draw
 					viewPort.Invalidate();
 				}
 			}
+		}
+
+		private void toolStripButton6_Click(object sender, EventArgs e)
+		{
+			pickUpSpeedButton.Checked = false;
+			if (dialogProcessor.Selection.ChangeColor == Color.Empty) {
+				dialogProcessor.Selection.FillColor = dialogProcessor.DefaultFillColor;
+			}
+			else
+            {
+				dialogProcessor.Selection.FillColor = dialogProcessor.Selection.ChangeColor;
+			}
+			dialogProcessor.Selection = null;
+			viewPort.Invalidate();
+		}
+
+        private void pickUpSpeedButton_Click(object sender, EventArgs e)
+        {
+			toolStripButton6.Checked = false;
+			dialogProcessor.MultipleSelection = new List<Shape>();
 		}
     }
 }
