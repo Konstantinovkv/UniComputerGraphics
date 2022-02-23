@@ -49,11 +49,7 @@ namespace Draw
 		#endregion
 
 		private Color defaultFillColor = Color.White;
-		public virtual Color DefaultFillColor
-		{
-			get { return defaultFillColor; }
-			set { defaultFillColor = value; }
-		}
+		private Color defaultStrokeColor = Color.Black;
 
 		/// <summary>
 		/// Добавя примитив - правоъгълник на произволно място върху клиентската област.
@@ -66,7 +62,7 @@ namespace Draw
 			
 			RectangleShape rect = new RectangleShape(new Rectangle(x,y,100,200));
 			rect.FillColor = defaultFillColor;
-			rect.StrokeColor = Color.Green;
+			rect.StrokeColor = defaultStrokeColor;
 			rect.StrokeWidth = 1;
 
 			ShapeList.Add(rect);
@@ -83,7 +79,7 @@ namespace Draw
 
 			EllipseShape ellipse = new EllipseShape(new Rectangle(x, y, 100, 200));
 			ellipse.FillColor = defaultFillColor;
-			ellipse.StrokeColor = Color.Green;
+			ellipse.StrokeColor = defaultStrokeColor;
 			ellipse.StrokeWidth = 1;
 
 			ShapeList.Add(ellipse);
@@ -101,7 +97,7 @@ namespace Draw
 			LineShape line = new LineShape(new Rectangle(x, y, 100, 200));
 			line.FillColor = defaultFillColor;
 			line.StrokeWidth = 1;
-			line.StrokeColor = Color.Black;
+			line.StrokeColor = Color.Red;
 
 			ShapeList.Add(line);
 		}
@@ -114,23 +110,14 @@ namespace Draw
 
 			PointShape point = new PointShape(new Rectangle(x, y, 100, 200));
 			point.FillColor = defaultFillColor;
+			point.StrokeColor = defaultStrokeColor;
 			point.StrokeWidth = 1;
 
 			ShapeList.Add(point);
 		}
 
 		private int lastSelection;
-		public virtual int LastSelection
-		{
-			get { return lastSelection; }
-			set { lastSelection = value; }
-		}
 		private bool isSelected = false;
-		public virtual bool IsSelected
-		{
-			get { return isSelected; }
-			set { isSelected = value; }
-		}
 
 		/// <summary>
 		/// Проверява дали дадена точка е в елемента.
@@ -148,7 +135,7 @@ namespace Draw
 					ShapeList[i].FillColor = Color.Red;
 					if (isSelected == true && lastSelection != i)
 					{
-						if(ShapeList[lastSelection].ChangeColor == null) { 
+						if (ShapeList[lastSelection].ChangeColor == Color.Empty) { 
 							ShapeList[lastSelection].FillColor = defaultFillColor;
 						}
 						else
