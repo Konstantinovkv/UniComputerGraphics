@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 
 namespace Draw
@@ -26,7 +27,17 @@ namespace Draw
 			get { return selection; }
 			set { selection = value; }
 		}
-		
+
+		/// <summary>
+		/// Избрани елементи.
+		/// </summary>
+		private List<Shape> multipleSelection = new List<Shape>();
+		public List<Shape> MultipleSelection
+		{
+			get { return multipleSelection; }
+			set { multipleSelection = value; }
+		}
+
 		/// <summary>
 		/// Дали в момента диалога е в състояние на "влачене" на избрания елемент.
 		/// </summary>
@@ -49,6 +60,11 @@ namespace Draw
 		#endregion
 
 		private Color defaultFillColor = Color.White;
+		public Color DefaultFillColor
+		{
+			get { return defaultFillColor; }
+			set { defaultFillColor = value; }
+		}
 		private Color defaultStrokeColor = Color.Black;
 
 		/// <summary>
@@ -119,6 +135,13 @@ namespace Draw
 		private int lastSelection;
 		private bool isSelected = false;
 
+		private bool isMultipleSelection = false;
+		public bool IsMultipleSelection
+		{
+			get { return isMultipleSelection; }
+			set { isMultipleSelection = value; }
+		}
+
 		/// <summary>
 		/// Проверява дали дадена точка е в елемента.
 		/// Обхожда в ред обратен на визуализацията с цел намиране на
@@ -133,7 +156,7 @@ namespace Draw
 				if (ShapeList[i].Contains(point))
 				{
 					ShapeList[i].FillColor = Color.Red;
-					if (isSelected == true && lastSelection != i)
+					if (isSelected == true && lastSelection != i && !isMultipleSelection)
 					{
 						if (ShapeList[lastSelection].ChangeColor == Color.Empty) { 
 							ShapeList[lastSelection].FillColor = defaultFillColor;
@@ -163,6 +186,12 @@ namespace Draw
 				selection.Location = new PointF(selection.Location.X + p.X - lastLocation.X, selection.Location.Y + p.Y - lastLocation.Y);
 				lastLocation = p;
 			}
-		}
+			if (multipleSelection.Count != 0)
+            {
+                foreach (Shape item in MultipleSelection)
+                    item.Location = new PointF(item.Location.X + p.X - lastLocation.X, item.Location.Y + p.Y - lastLocation.Y);
+				lastLocation = p;
+			}
+        }
 	}
 }
