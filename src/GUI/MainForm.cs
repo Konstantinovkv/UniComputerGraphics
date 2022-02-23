@@ -134,6 +134,7 @@ namespace Draw
 					try
 					{
 						dialogProcessor.Selection.FillColor = colorDialog1.Color;
+						dialogProcessor.Selection.ChangeColor = colorDialog1.Color;
 					}
 					catch (NullReferenceException)
 					{

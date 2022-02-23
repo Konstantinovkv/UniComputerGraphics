@@ -64,7 +64,14 @@ namespace Draw
 			get { return Rectangle.Location; }
 			set { rectangle.Location = value; }
 		}
-		
+
+		private Color changeColor;
+		public virtual Color ChangeColor
+		{
+			get { return changeColor; }
+			set { changeColor = value; }
+		}
+
 		/// <summary>
 		/// Цвят на елемента.
 		/// </summary>
