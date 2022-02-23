@@ -45,9 +45,16 @@ namespace Draw
 			get { return lastLocation; }
 			set { lastLocation = value; }
 		}
-		
+
 		#endregion
-		
+
+		private Color defaultFillColor = Color.White;
+		public virtual Color DefaultFillColor
+		{
+			get { return defaultFillColor; }
+			set { defaultFillColor = value; }
+		}
+
 		/// <summary>
 		/// Добавя примитив - правоъгълник на произволно място върху клиентската област.
 		/// </summary>
@@ -58,7 +65,7 @@ namespace Draw
 			int y = rnd.Next(100,600);
 			
 			RectangleShape rect = new RectangleShape(new Rectangle(x,y,100,200));
-			rect.FillColor = Color.White;
+			rect.FillColor = defaultFillColor;
 			rect.StrokeColor = Color.Green;
 			rect.StrokeWidth = 1;
 
@@ -75,7 +82,7 @@ namespace Draw
 			int y = rnd.Next(100, 600);
 
 			EllipseShape ellipse = new EllipseShape(new Rectangle(x, y, 100, 200));
-			ellipse.FillColor = Color.White;
+			ellipse.FillColor = defaultFillColor;
 			ellipse.StrokeColor = Color.Green;
 			ellipse.StrokeWidth = 1;
 
@@ -92,7 +99,7 @@ namespace Draw
 			int y = rnd.Next(100, 600);
 
 			LineShape line = new LineShape(new Rectangle(x, y, 100, 200));
-			line.FillColor = Color.White;
+			line.FillColor = defaultFillColor;
 			line.StrokeWidth = 1;
 			line.StrokeColor = Color.Black;
 
@@ -106,10 +113,23 @@ namespace Draw
 			int y = rnd.Next(100, 600);
 
 			PointShape point = new PointShape(new Rectangle(x, y, 100, 200));
-			point.FillColor = Color.White;
+			point.FillColor = defaultFillColor;
 			point.StrokeWidth = 1;
 
 			ShapeList.Add(point);
+		}
+
+		private int lastSelection;
+		public virtual int LastSelection
+		{
+			get { return lastSelection; }
+			set { lastSelection = value; }
+		}
+		private bool isSelected = false;
+		public virtual bool IsSelected
+		{
+			get { return isSelected; }
+			set { isSelected = value; }
 		}
 
 		/// <summary>
@@ -121,12 +141,27 @@ namespace Draw
 		/// <returns>Елемента на изображението, на който принадлежи дадената точка.</returns>
 		public Shape ContainsPoint(PointF point)
 		{
-			for(int i = ShapeList.Count - 1; i >= 0; i--){
-				if (ShapeList[i].Contains(point)){
+			for (int i = ShapeList.Count - 1; i >= 0; i--)
+			{
+				if (ShapeList[i].Contains(point))
+				{
 					ShapeList[i].FillColor = Color.Red;
-						
+					if (isSelected == true && lastSelection != i)
+					{
+						if(ShapeList[lastSelection].ChangeColor == null) { 
+							ShapeList[lastSelection].FillColor = defaultFillColor;
+						}
+						else
+                        {
+							ShapeList[lastSelection].FillColor = ShapeList[lastSelection].ChangeColor;
+
+						}
+					}
+					isSelected = true;
+					lastSelection = i;
+
 					return ShapeList[i];
-				}	
+				}
 			}
 			return null;
 		}
