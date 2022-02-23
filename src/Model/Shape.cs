@@ -56,7 +56,14 @@ namespace Draw
 			get { return Rectangle.Height; }
 			set { rectangle.Height = value; }
 		}
-		
+
+		private bool targeted = false;
+		public virtual bool Targeted
+		{
+			get { return targeted; }
+			set { targeted = value; }
+		}
+
 		/// <summary>
 		/// Горен ляв ъгъл на елемента.
 		/// </summary>

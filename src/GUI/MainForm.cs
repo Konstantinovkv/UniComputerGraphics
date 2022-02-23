@@ -76,14 +76,19 @@ namespace Draw
 			}
 			if (toolStripButton6.Checked)
 			{
-				dialogProcessor.MultipleSelection.Add(dialogProcessor.ContainsPoint(e.Location));
-				if (dialogProcessor.MultipleSelection.Count != 0)
+				if (!dialogProcessor.ContainsPoint(e.Location).Targeted)
 				{
-					statusBar.Items[0].Text = "Последно действие: Селекция на примитиви";
-					dialogProcessor.IsDragging = true;
-					dialogProcessor.LastLocation = e.Location;
-					viewPort.Invalidate();
+					dialogProcessor.MultipleSelection.Add(dialogProcessor.ContainsPoint(e.Location));
 				}
+				if (dialogProcessor.MultipleSelection.Count != 0)
+					{
+						dialogProcessor.ContainsPoint(e.Location).Targeted = true;
+						statusBar.Items[0].Text = "Последно действие: Селекция на примитиви";
+						dialogProcessor.IsDragging = true;
+						dialogProcessor.LastLocation = e.Location;
+						viewPort.Invalidate();
+					}
+				
 			}
 		}
 
@@ -201,12 +206,17 @@ namespace Draw
 		private void toolStripButton6_Click(object sender, EventArgs e)
 		{
 			pickUpSpeedButton.Checked = false;
-			if (dialogProcessor.Selection.ChangeColor == Color.Empty) {
-				dialogProcessor.Selection.FillColor = dialogProcessor.DefaultFillColor;
-			}
-			else
-            {
-				dialogProcessor.Selection.FillColor = dialogProcessor.Selection.ChangeColor;
+			dialogProcessor.IsMultipleSelection = true;
+			if (dialogProcessor.Selection != null)
+			{
+				if (dialogProcessor.Selection.ChangeColor == Color.Empty)
+				{
+					dialogProcessor.Selection.FillColor = dialogProcessor.DefaultFillColor;
+				}
+				else
+				{
+					dialogProcessor.Selection.FillColor = dialogProcessor.Selection.ChangeColor;
+				}
 			}
 			dialogProcessor.Selection = null;
 			viewPort.Invalidate();
@@ -215,7 +225,23 @@ namespace Draw
         private void pickUpSpeedButton_Click(object sender, EventArgs e)
         {
 			toolStripButton6.Checked = false;
+			dialogProcessor.IsMultipleSelection = false;
+			if (dialogProcessor.MultipleSelection.Count != 0)
+			{
+				foreach (Shape item in dialogProcessor.MultipleSelection) { 
+					if (item.ChangeColor == Color.Empty)
+					{
+						item.FillColor = dialogProcessor.DefaultFillColor;
+					}
+					else
+					{
+						item.FillColor = dialogProcessor.Selection.ChangeColor;
+					}
+					item.Targeted = false;
+				}
+			}
 			dialogProcessor.MultipleSelection = new List<Shape>();
+			viewPort.Invalidate();
 		}
     }
 }

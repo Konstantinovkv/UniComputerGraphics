@@ -135,6 +135,13 @@ namespace Draw
 		private int lastSelection;
 		private bool isSelected = false;
 
+		private bool isMultipleSelection = false;
+		public bool IsMultipleSelection
+		{
+			get { return isMultipleSelection; }
+			set { isMultipleSelection = value; }
+		}
+
 		/// <summary>
 		/// Проверява дали дадена точка е в елемента.
 		/// Обхожда в ред обратен на визуализацията с цел намиране на
@@ -149,7 +156,7 @@ namespace Draw
 				if (ShapeList[i].Contains(point))
 				{
 					ShapeList[i].FillColor = Color.Red;
-					if (isSelected == true && lastSelection != i)
+					if (isSelected == true && lastSelection != i && !isMultipleSelection)
 					{
 						if (ShapeList[lastSelection].ChangeColor == Color.Empty) { 
 							ShapeList[lastSelection].FillColor = defaultFillColor;
@@ -179,6 +186,12 @@ namespace Draw
 				selection.Location = new PointF(selection.Location.X + p.X - lastLocation.X, selection.Location.Y + p.Y - lastLocation.Y);
 				lastLocation = p;
 			}
-		}
+			if (multipleSelection.Count != 0)
+            {
+                foreach (Shape item in MultipleSelection)
+                    item.Location = new PointF(item.Location.X + p.X - lastLocation.X, item.Location.Y + p.Y - lastLocation.Y);
+				lastLocation = p;
+			}
+        }
 	}
 }
