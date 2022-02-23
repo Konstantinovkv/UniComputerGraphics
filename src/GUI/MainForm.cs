@@ -148,7 +148,7 @@ namespace Draw
         private void speedMenu_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
 
-        }
+		}
 
         private void numericUpDown1_ValueChanged(object sender, EventArgs e)
         {
@@ -165,6 +165,26 @@ namespace Draw
 				}
 			}
 
+		}
+
+
+		private void strokeColorDialog(object sender, EventArgs e)
+        {
+			if (colorDialog2.ShowDialog() == DialogResult.OK)
+			{
+				if (dialogProcessor.Selection != null)
+				{
+					try
+					{
+						dialogProcessor.Selection.StrokeColor = colorDialog2.Color;
+					}
+					catch (NullReferenceException)
+					{
+						Console.WriteLine("Nothing to fill.");
+					}
+					viewPort.Invalidate();
+				}
+			}
 		}
     }
 }

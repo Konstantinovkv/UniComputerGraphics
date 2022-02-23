@@ -97,7 +97,7 @@ namespace Draw
 			LineShape line = new LineShape(new Rectangle(x, y, 100, 200));
 			line.FillColor = defaultFillColor;
 			line.StrokeWidth = 1;
-			line.StrokeColor = Color.Red;
+			line.StrokeColor = defaultStrokeColor;
 
 			ShapeList.Add(line);
 		}
