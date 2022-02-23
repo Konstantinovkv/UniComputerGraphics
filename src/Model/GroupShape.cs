@@ -1,11 +1,52 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Drawing;
 
-namespace Draw.src.Model
+namespace Draw
 {
-    class GroupShape
-    {
-    }
+	/// <summary>
+	/// Класът група комбинира набор от селектирани форми.
+	/// </summary>
+	public class GroupShape : Shape
+	{
+		#region Constructor
+
+		public GroupShape() : base()
+		{
+		}
+
+		public GroupShape(RectangleF group) : base(group)
+		{
+		}
+
+		public GroupShape(GroupShape groupS) : base(groupS)
+		{
+		}
+
+		#endregion
+
+		
+
+
+		public override bool Contains(PointF point)
+		{
+			foreach (Shape item in SubShape)
+			{
+				if (item.Contains(point))
+				{
+					return true;
+				}
+			}
+			return false;
+		}
+
+		
+		public override void DrawSelf(Graphics grfx)
+		{
+			foreach (Shape item in SubShape)
+			{
+				item.DrawSelf(grfx);
+			}
+		}
+	}
 }

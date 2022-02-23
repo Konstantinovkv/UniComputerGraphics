@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 
 namespace Draw
@@ -29,9 +30,11 @@ namespace Draw
 			this.FillColor =  shape.FillColor;
 		}
 		#endregion
-		
+
 		#region Properties
-		
+
+		public List<Shape> SubShape = new List<Shape>();
+
 		/// <summary>
 		/// Обхващащ правоъгълник на елемента.
 		/// </summary>

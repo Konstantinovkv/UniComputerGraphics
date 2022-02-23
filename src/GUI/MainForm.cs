@@ -76,11 +76,11 @@ namespace Draw
 			}
 			if (toolStripButton6.Checked)
 			{
-				if (!dialogProcessor.ContainsPoint(e.Location).Targeted)
+				if (dialogProcessor.ContainsPoint(e.Location) != null && !dialogProcessor.ContainsPoint(e.Location).Targeted)
 				{
 					dialogProcessor.MultipleSelection.Add(dialogProcessor.ContainsPoint(e.Location));
 				}
-				if (dialogProcessor.MultipleSelection.Count != 0)
+				if (dialogProcessor.MultipleSelection.Count != 0 && dialogProcessor.ContainsPoint(e.Location) != null)
 					{
 						dialogProcessor.ContainsPoint(e.Location).Targeted = true;
 						statusBar.Items[0].Text = "Последно действие: Селекция на примитиви";
@@ -141,7 +141,16 @@ namespace Draw
 			viewPort.Invalidate();
 		}
 
-        private void colorDialog(object sender, EventArgs e)
+		private void makeGroup(object sender, EventArgs e)
+		{
+			dialogProcessor.AddNewGroup();
+
+			statusBar.Items[0].Text = "Последно действие: Групиране на елементи.";
+
+			viewPort.Invalidate();
+		}
+
+		private void colorDialog(object sender, EventArgs e)
         {
 			if (colorDialog1.ShowDialog() == DialogResult.OK)
 			{
@@ -149,8 +158,19 @@ namespace Draw
 				{
 					try
 					{
-						dialogProcessor.Selection.FillColor = colorDialog1.Color;
-						dialogProcessor.Selection.ChangeColor = colorDialog1.Color;
+						if (dialogProcessor.Selection is GroupShape)
+						{
+							foreach (Shape item in dialogProcessor.Selection.SubShape)
+							{
+								item.FillColor = colorDialog1.Color;
+								item.ChangeColor = colorDialog1.Color;
+							}
+						}
+						else
+						{
+							dialogProcessor.Selection.FillColor = colorDialog1.Color;
+							dialogProcessor.Selection.ChangeColor = colorDialog1.Color;
+						}
 					}
 					catch (NullReferenceException)
 					{
@@ -205,6 +225,7 @@ namespace Draw
 
 		private void toolStripButton6_Click(object sender, EventArgs e)
 		{
+			dialogProcessor.SavedSelection = dialogProcessor.LastSelection;
 			pickUpSpeedButton.Checked = false;
 			dialogProcessor.IsMultipleSelection = true;
 			if (dialogProcessor.Selection != null)
@@ -243,5 +264,7 @@ namespace Draw
 			dialogProcessor.MultipleSelection = new List<Shape>();
 			viewPort.Invalidate();
 		}
+
+        
     }
 }

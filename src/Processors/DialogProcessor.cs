@@ -101,6 +101,18 @@ namespace Draw
 			ShapeList.Add(ellipse);
 		}
 
+		public void AddNewGroup()
+		{
+			GroupShape group = new GroupShape();
+
+			foreach (Shape item in MultipleSelection)
+			{
+				ShapeList.Remove(item);
+			}
+			group.SubShape = MultipleSelection;
+			ShapeList.Add(group);
+		}
+
 		/// <summary>
 		/// Добавя примитив - елипса на произволно място върху клиентската област.
 		/// </summary>
@@ -133,6 +145,17 @@ namespace Draw
 		}
 
 		private int lastSelection;
+		public int LastSelection
+		{
+			get { return lastSelection; }
+			set { lastSelection = value; }
+		}
+		private int savedSelection;
+		public int SavedSelection
+		{
+			get { return savedSelection; }
+			set { savedSelection = value; }
+		}
 		private bool isSelected = false;
 
 		private bool isMultipleSelection = false;
@@ -155,16 +178,47 @@ namespace Draw
 			{
 				if (ShapeList[i].Contains(point))
 				{
-					ShapeList[i].FillColor = Color.Red;
+					if (ShapeList[i] is GroupShape)
+					{
+						foreach (Shape item in ShapeList[i].SubShape)
+							item.FillColor = Color.Red;
+					}
+					else
+					{
+						ShapeList[i].FillColor = Color.Red;
+					}
 					if (isSelected == true && lastSelection != i && !isMultipleSelection)
 					{
-						if (ShapeList[lastSelection].ChangeColor == Color.Empty) { 
-							ShapeList[lastSelection].FillColor = defaultFillColor;
+						if(lastSelection > ShapeList.Count - 1)
+                        {
+							lastSelection = savedSelection;
+                        }
+						if (ShapeList[lastSelection] is GroupShape)
+						{
+							foreach (Shape item in ShapeList[lastSelection].SubShape)
+							{
+								if (item.ChangeColor == Color.Empty)
+								{
+									item.FillColor = defaultFillColor;
+								}
+								else
+								{
+									item.FillColor = item.ChangeColor;
+
+								}
+							}
 						}
 						else
-                        {
-							ShapeList[lastSelection].FillColor = ShapeList[lastSelection].ChangeColor;
+						{
+							if (ShapeList[lastSelection].ChangeColor == Color.Empty)
+							{
+								ShapeList[lastSelection].FillColor = defaultFillColor;
+							}
+							else
+							{
+								ShapeList[lastSelection].FillColor = ShapeList[lastSelection].ChangeColor;
 
+							}
 						}
 					}
 					isSelected = true;
@@ -182,15 +236,24 @@ namespace Draw
 		/// <param name="p">Вектор на транслация.</param>
 		public void TranslateTo(PointF p)
 		{
+			if (selection is GroupShape)
+			{
+				foreach (Shape item in selection.SubShape)
+					item.Location = new PointF(item.Location.X + p.X - lastLocation.X, item.Location.Y + p.Y - lastLocation.Y);
+				lastLocation = p;
+				return;
+			}
 			if (selection != null) {
 				selection.Location = new PointF(selection.Location.X + p.X - lastLocation.X, selection.Location.Y + p.Y - lastLocation.Y);
 				lastLocation = p;
+				return;
 			}
 			if (multipleSelection.Count != 0)
             {
                 foreach (Shape item in MultipleSelection)
                     item.Location = new PointF(item.Location.X + p.X - lastLocation.X, item.Location.Y + p.Y - lastLocation.Y);
 				lastLocation = p;
+				return;
 			}
         }
 	}
