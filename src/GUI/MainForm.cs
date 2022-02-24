@@ -158,11 +158,18 @@ namespace Draw
         {
 			if (colorDialog1.ShowDialog() == DialogResult.OK)
 			{
-				if (dialogProcessor.Selection != null)
+				if (dialogProcessor.Selection != null || dialogProcessor.MultipleSelection.Count != 0)
 				{
 					try
 					{
-						RecursiveColorChange(dialogProcessor.Selection);
+						if (dialogProcessor.IsMultipleSelection)
+						{
+							MultipleRecursiveColorChange(dialogProcessor.MultipleSelection);
+						}
+						else
+						{
+							RecursiveColorChange(dialogProcessor.Selection);
+						}
 					}
 					catch (NullReferenceException)
 					{
@@ -172,6 +179,14 @@ namespace Draw
 				}
             }
         }
+
+		private void MultipleRecursiveColorChange(List<Shape> shapes)
+		{
+			foreach (Shape item in shapes)
+			{
+				RecursiveColorChange(item);
+			}
+		}
 
 		private void RecursiveColorChange(Shape shape)
 		{
@@ -285,6 +300,8 @@ namespace Draw
 			pickUpSpeedButton.Checked = false;
 			dialogProcessor.IsMultipleSelection = true;
 			ResetSingleSelection(dialogProcessor.Selection);
+			ResetMultipleSelection(dialogProcessor.MultipleSelection);
+			dialogProcessor.MultipleSelection = new List<Shape>();
 			dialogProcessor.Selection = null;
 			viewPort.Invalidate();
 		}
@@ -317,7 +334,9 @@ namespace Draw
 			toolStripButton6.Checked = false;
 			dialogProcessor.IsMultipleSelection = false;
 			ResetMultipleSelection(dialogProcessor.MultipleSelection);
+			ResetSingleSelection(dialogProcessor.Selection);
 			dialogProcessor.MultipleSelection = new List<Shape>();
+			dialogProcessor.Selection = null;
 			viewPort.Invalidate();
 		}
 
