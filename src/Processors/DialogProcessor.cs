@@ -179,7 +179,7 @@ namespace Draw
 				if (ShapeList[i].Contains(point))
 				{
 					RecursiveFillRed(ShapeList[i]);
-					if (isSelected == true && lastSelection != i && !isMultipleSelection)
+					if (isSelected == true && lastSelection < i && !isMultipleSelection)
 					{
 						if(lastSelection > ShapeList.Count - 1)
                         {
@@ -205,6 +205,7 @@ namespace Draw
 				{
 					ResetMultipleSelection(item);
 				}
+				return;
 			}
 			if (shape.ChangeColor == Color.Empty)
 			{
@@ -236,8 +237,7 @@ namespace Draw
 		{
 			if (selection is GroupShape)
 			{
-				foreach (Shape item in selection.SubShape)
-					item.Location = new PointF(item.Location.X + p.X - lastLocation.X, item.Location.Y + p.Y - lastLocation.Y);
+				MoveGroupSelection(selection, p);
 				lastLocation = p;
 				return;
 			}
@@ -254,5 +254,19 @@ namespace Draw
 				return;
 			}
         }
+
+		private void MoveGroupSelection(Shape shape, PointF p)
+		{
+			foreach (Shape item in shape.SubShape)
+			{
+				if (item is GroupShape)
+				{
+					MoveGroupSelection(item, p);
+				}
+				else { 
+					item.Location = new PointF(item.Location.X + p.X - lastLocation.X, item.Location.Y + p.Y - lastLocation.Y);
+				}
+			}
+		}
 	}
 }

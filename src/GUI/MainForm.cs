@@ -267,7 +267,10 @@ namespace Draw
 			{
 				if (shape is GroupShape)
 				{
-					ResetSingleSelection(shape);
+					foreach (Shape item in shape.SubShape)
+					{
+						ResetSingleSelection(item);
+					}
 				}
 				if (shape.ChangeColor == Color.Empty)
 				{
@@ -299,6 +302,7 @@ namespace Draw
 					if (item is GroupShape)
                     {
 						ResetMultipleSelection(item.SubShape);
+						return;
                     }
 					if (item.ChangeColor == Color.Empty)
 					{
