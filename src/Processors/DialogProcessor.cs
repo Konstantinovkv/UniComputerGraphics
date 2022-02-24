@@ -101,6 +101,18 @@ namespace Draw
 			ShapeList.Add(ellipse);
 		}
 
+		public void AddNewGroup()
+		{
+			GroupShape group = new GroupShape();
+
+			foreach (Shape item in MultipleSelection)
+			{
+				ShapeList.Remove(item);
+			}
+			group.SubShape = MultipleSelection;
+			ShapeList.Add(group);
+		}
+
 		/// <summary>
 		/// Добавя примитив - елипса на произволно място върху клиентската област.
 		/// </summary>
@@ -132,9 +144,6 @@ namespace Draw
 			ShapeList.Add(point);
 		}
 
-		private int lastSelection;
-		private bool isSelected = false;
-
 		private bool isMultipleSelection = false;
 		public bool IsMultipleSelection
 		{
@@ -155,43 +164,130 @@ namespace Draw
 			{
 				if (ShapeList[i].Contains(point))
 				{
-					ShapeList[i].FillColor = Color.Red;
-					if (isSelected == true && lastSelection != i && !isMultipleSelection)
+					if (!isMultipleSelection)
 					{
-						if (ShapeList[lastSelection].ChangeColor == Color.Empty) { 
-							ShapeList[lastSelection].FillColor = defaultFillColor;
-						}
-						else
-                        {
-							ShapeList[lastSelection].FillColor = ShapeList[lastSelection].ChangeColor;
-
-						}
+						ResetSelection(ShapeList);
 					}
-					isSelected = true;
-					lastSelection = i;
+					RecursiveSelect(ShapeList[i]);
+					RecursiveFillRed(ShapeList[i]);
+					
 
 					return ShapeList[i];
 				}
 			}
 			return null;
 		}
-		
+
+		private void RecursiveSelect(Shape shape)
+        {
+			if (shape is GroupShape)
+			{
+				foreach (Shape item in shape.SubShape)
+				{
+					RecursiveSelect(item);
+				}
+			}
+			shape.IsSelected = true;
+		}
+
+		private void ResetSelection(List<Shape> shapelist)
+		{
+			foreach (Shape item in shapelist)
+			{
+				if (item is GroupShape)
+				{
+					ResetGroup(item.SubShape);
+				}
+				if (item.ChangeColor == Color.Empty)
+				{
+					item.FillColor = defaultFillColor;
+				}
+				else
+				{
+					item.FillColor = item.ChangeColor;
+				}
+				item.IsSelected = false;
+			}
+		}
+
+		private void ResetGroup(List<Shape> shapes)
+        {
+			foreach (Shape item in shapes)
+			{
+				if (item is GroupShape)
+				{
+					ResetGroup(item.SubShape);
+				}
+				if (item.ChangeColor == Color.Empty)
+				{
+					item.FillColor = defaultFillColor;
+				}
+				else
+				{
+					item.FillColor = item.ChangeColor;
+				}
+				item.IsSelected = false;
+			}
+		}
+
+		public void RecursiveFillRed(Shape shape)
+        {
+			if (shape is GroupShape)
+			{
+				foreach (Shape item in shape.SubShape)
+				{
+					RecursiveFillRed(item);
+				}
+			}
+			shape.FillColor = Color.Red;
+		}
+
 		/// <summary>
 		/// Транслация на избраният елемент на вектор определен от <paramref name="p>p</paramref>
 		/// </summary>
 		/// <param name="p">Вектор на транслация.</param>
 		public void TranslateTo(PointF p)
 		{
+			if (selection is GroupShape)
+			{
+				MoveGroupSelection(selection, p);
+				lastLocation = p;
+				return;
+			}
 			if (selection != null) {
 				selection.Location = new PointF(selection.Location.X + p.X - lastLocation.X, selection.Location.Y + p.Y - lastLocation.Y);
 				lastLocation = p;
+				return;
 			}
 			if (multipleSelection.Count != 0)
-            {
-                foreach (Shape item in MultipleSelection)
-                    item.Location = new PointF(item.Location.X + p.X - lastLocation.X, item.Location.Y + p.Y - lastLocation.Y);
-				lastLocation = p;
+			{
+				foreach (Shape item in MultipleSelection)
+				{
+					if (item is GroupShape)
+					{
+						MoveGroupSelection(item, p);
+					}
+					else { 
+						item.Location = new PointF(item.Location.X + p.X - lastLocation.X, item.Location.Y + p.Y - lastLocation.Y);
+					}
+				}
+                lastLocation = p;
+				return;
 			}
         }
+
+		private void MoveGroupSelection(Shape shape, PointF p)
+		{
+			foreach (Shape item in shape.SubShape)
+			{
+				if (item is GroupShape)
+				{
+					MoveGroupSelection(item, p);
+				}
+				else { 
+					item.Location = new PointF(item.Location.X + p.X - lastLocation.X, item.Location.Y + p.Y - lastLocation.Y);
+				}
+			}
+		}
 	}
 }

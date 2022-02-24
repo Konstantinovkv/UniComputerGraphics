@@ -76,11 +76,11 @@ namespace Draw
 			}
 			if (toolStripButton6.Checked)
 			{
-				if (!dialogProcessor.ContainsPoint(e.Location).Targeted)
+				if (dialogProcessor.ContainsPoint(e.Location) != null && !dialogProcessor.ContainsPoint(e.Location).Targeted)
 				{
 					dialogProcessor.MultipleSelection.Add(dialogProcessor.ContainsPoint(e.Location));
 				}
-				if (dialogProcessor.MultipleSelection.Count != 0)
+				if (dialogProcessor.MultipleSelection.Count != 0 && dialogProcessor.ContainsPoint(e.Location) != null)
 					{
 						dialogProcessor.ContainsPoint(e.Location).Targeted = true;
 						statusBar.Items[0].Text = "Последно действие: Селекция на примитиви";
@@ -141,7 +141,20 @@ namespace Draw
 			viewPort.Invalidate();
 		}
 
-        private void colorDialog(object sender, EventArgs e)
+		private void makeGroup(object sender, EventArgs e)
+		{
+			dialogProcessor.AddNewGroup();
+
+			ResetMultipleSelection(dialogProcessor.MultipleSelection);
+
+			dialogProcessor.MultipleSelection = new List<Shape>();
+
+			statusBar.Items[0].Text = "Последно действие: Групиране на елементи.";
+
+			viewPort.Invalidate();
+		}
+
+		private void colorDialog(object sender, EventArgs e)
         {
 			if (colorDialog1.ShowDialog() == DialogResult.OK)
 			{
@@ -149,8 +162,7 @@ namespace Draw
 				{
 					try
 					{
-						dialogProcessor.Selection.FillColor = colorDialog1.Color;
-						dialogProcessor.Selection.ChangeColor = colorDialog1.Color;
+						RecursiveColorChange(dialogProcessor.Selection);
 					}
 					catch (NullReferenceException)
 					{
@@ -161,7 +173,20 @@ namespace Draw
             }
         }
 
-        private void speedMenu_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+		private void RecursiveColorChange(Shape shape)
+		{
+			if (shape is GroupShape)
+			{
+				foreach (Shape item in shape.SubShape)
+				{
+					RecursiveColorChange(item);
+				}
+			}
+			shape.FillColor = colorDialog1.Color;
+			shape.ChangeColor = colorDialog1.Color;
+		}
+
+		private void speedMenu_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
 
 		}
@@ -172,15 +197,26 @@ namespace Draw
             {
 				try
 				{
-					dialogProcessor.Selection.StrokeWidth = (int)numericUpDown1.Value;
-					viewPort.Invalidate();
+					NumericRecursiveChange(dialogProcessor.Selection);
 				}
 				catch (NullReferenceException)
 				{
 					Console.WriteLine("Nothing to fill.");
 				}
+				viewPort.Invalidate();
 			}
+		}
 
+		private void NumericRecursiveChange(Shape shape)
+        {
+			if (shape is GroupShape)
+			{
+				foreach (Shape item in shape.SubShape)
+				{
+					NumericRecursiveChange(item);
+				}
+			}
+			shape.StrokeWidth = (int)numericUpDown1.Value;
 		}
 
 
@@ -192,7 +228,7 @@ namespace Draw
 				{
 					try
 					{
-						dialogProcessor.Selection.StrokeColor = colorDialog2.Color;
+						RecursiveStrokeColor(dialogProcessor.Selection);
 					}
 					catch (NullReferenceException)
 					{
@@ -203,32 +239,69 @@ namespace Draw
 			}
 		}
 
+		private void RecursiveStrokeColor(Shape shape)
+        {
+			if (shape is GroupShape)
+			{
+				foreach (Shape item in shape.SubShape)
+				{
+					RecursiveStrokeColor(item);
+				}
+			}
+			shape.StrokeColor = colorDialog2.Color;
+		}
+
 		private void toolStripButton6_Click(object sender, EventArgs e)
 		{
 			pickUpSpeedButton.Checked = false;
 			dialogProcessor.IsMultipleSelection = true;
-			if (dialogProcessor.Selection != null)
-			{
-				if (dialogProcessor.Selection.ChangeColor == Color.Empty)
-				{
-					dialogProcessor.Selection.FillColor = dialogProcessor.DefaultFillColor;
-				}
-				else
-				{
-					dialogProcessor.Selection.FillColor = dialogProcessor.Selection.ChangeColor;
-				}
-			}
+			ResetSingleSelection(dialogProcessor.Selection);
 			dialogProcessor.Selection = null;
 			viewPort.Invalidate();
 		}
 
-        private void pickUpSpeedButton_Click(object sender, EventArgs e)
+		private void ResetSingleSelection(Shape shape)
+		{
+			if (dialogProcessor.Selection != null)
+			{
+				if (shape is GroupShape)
+				{
+					foreach (Shape item in shape.SubShape)
+					{
+						ResetSingleSelection(item);
+					}
+				}
+				if (shape.ChangeColor == Color.Empty)
+				{
+					shape.FillColor = dialogProcessor.DefaultFillColor;
+				}
+				else
+				{
+					shape.FillColor = dialogProcessor.Selection.ChangeColor;
+				}
+				shape.IsSelected = false;
+			}
+		}
+
+		private void pickUpSpeedButton_Click(object sender, EventArgs e)
         {
 			toolStripButton6.Checked = false;
 			dialogProcessor.IsMultipleSelection = false;
-			if (dialogProcessor.MultipleSelection.Count != 0)
+			ResetMultipleSelection(dialogProcessor.MultipleSelection);
+			dialogProcessor.MultipleSelection = new List<Shape>();
+			viewPort.Invalidate();
+		}
+
+		private void ResetMultipleSelection(List<Shape> shapes)
+        {
+			if (shapes.Count != 0)
 			{
-				foreach (Shape item in dialogProcessor.MultipleSelection) { 
+				foreach (Shape item in shapes)
+				{
+					if (item is GroupShape)
+                    {
+						ResetMultipleSelection(item.SubShape);
+                    }
 					if (item.ChangeColor == Color.Empty)
 					{
 						item.FillColor = dialogProcessor.DefaultFillColor;
@@ -237,11 +310,10 @@ namespace Draw
 					{
 						item.FillColor = dialogProcessor.Selection.ChangeColor;
 					}
+					item.IsSelected = false;
 					item.Targeted = false;
 				}
 			}
-			dialogProcessor.MultipleSelection = new List<Shape>();
-			viewPort.Invalidate();
 		}
-    }
+	}
 }
