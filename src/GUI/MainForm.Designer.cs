@@ -268,7 +268,7 @@
             // 
             // numericUpDown2
             // 
-            this.numericUpDown2.Location = new System.Drawing.Point(1024, 25);
+            this.numericUpDown2.Location = new System.Drawing.Point(143, 58);
             this.numericUpDown2.Name = "numericUpDown2";
             this.numericUpDown2.Size = new System.Drawing.Size(86, 22);
             this.numericUpDown2.TabIndex = 6;
