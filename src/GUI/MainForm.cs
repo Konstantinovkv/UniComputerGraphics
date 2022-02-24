@@ -238,18 +238,33 @@ namespace Draw
         {
 			if (colorDialog2.ShowDialog() == DialogResult.OK)
 			{
-				if (dialogProcessor.Selection != null)
+				if (dialogProcessor.Selection != null || dialogProcessor.MultipleSelection.Count != 0)
 				{
 					try
 					{
-						RecursiveStrokeColor(dialogProcessor.Selection);
+						if (dialogProcessor.IsMultipleSelection)
+						{
+							MultipleRecursiveStrokeColor(dialogProcessor.MultipleSelection);
+						}
+						else
+						{
+							RecursiveStrokeColor(dialogProcessor.Selection);
+						}
 					}
 					catch (NullReferenceException)
 					{
-						Console.WriteLine("Nothing to fill.");
+						Console.WriteLine("Nothing to change.");
 					}
 					viewPort.Invalidate();
 				}
+			}
+		}
+
+		private void MultipleRecursiveStrokeColor(List<Shape> shapes)
+		{
+			foreach (Shape item in shapes)
+			{
+				RecursiveStrokeColor(item);
 			}
 		}
 
@@ -330,33 +345,48 @@ namespace Draw
 			}
 		}
 
-        private void numericUpDown2_ValueChanged(object sender, EventArgs e)
-        {
-			if (dialogProcessor.Selection != null)
+		private void numericUpDown2_ValueChanged(object sender, EventArgs e)
+		{
+			if (dialogProcessor.Selection != null || dialogProcessor.MultipleSelection.Count != 0)
 			{
 				try
 				{
-					NumericSizeRecursiveChange(dialogProcessor.Selection);
+					if (dialogProcessor.IsMultipleSelection)
+					{
+						NumericSizeMultipleRecursiveChange(dialogProcessor.MultipleSelection, (1+(int)numericUpDown2.Value/10));
+					}
+					else
+					{
+						NumericSizeSingleRecursiveChange(dialogProcessor.Selection, (1 + (int)numericUpDown2.Value / 10));
+					}
 				}
 				catch (NullReferenceException)
 				{
-					Console.WriteLine("Nothing to change.");
+					Console.WriteLine("Nothing to resize.");
 				}
 				viewPort.Invalidate();
 			}
 		}
 
-		private void NumericSizeRecursiveChange(Shape shape)
+		private void NumericSizeMultipleRecursiveChange(List<Shape> shapes, int size)
+		{
+			foreach (Shape item in shapes)
+			{
+				NumericSizeSingleRecursiveChange(item, size);
+			}
+		}
+
+		private void NumericSizeSingleRecursiveChange(Shape shape, int size)
 		{
 			if (shape is GroupShape)
 			{
 				foreach (Shape item in shape.SubShape)
 				{
-					NumericSizeRecursiveChange(item);
+					NumericSizeSingleRecursiveChange(item, size);
 				}
 			}
-			shape.Width = shape.Width * (1+(int)numericUpDown1.Value/10);
-			shape.Height = shape.Height * (1 + (int)numericUpDown1.Value / 10);
+			shape.Width = shape.Width * size;
+			shape.Height = shape.Height * size;
 		}
 	}
 }
