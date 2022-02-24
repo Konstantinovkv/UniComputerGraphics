@@ -193,11 +193,17 @@ namespace Draw
 
         private void numericUpDown1_ValueChanged(object sender, EventArgs e)
         {
-			if (dialogProcessor.Selection != null)
+			if (dialogProcessor.Selection != null || dialogProcessor.MultipleSelection.Count != 0)
             {
 				try
 				{
-					NumericRecursiveChange(dialogProcessor.Selection);
+                    if (dialogProcessor.IsMultipleSelection)
+                    {
+						NumericMultipleRecursiveChange(dialogProcessor.MultipleSelection, (int)numericUpDown1.Value);
+                    }
+					else {
+						NumericSingleRecursiveChange(dialogProcessor.Selection, (int)numericUpDown1.Value);
+					}
 				}
 				catch (NullReferenceException)
 				{
@@ -207,16 +213,24 @@ namespace Draw
 			}
 		}
 
-		private void NumericRecursiveChange(Shape shape)
+		private void NumericMultipleRecursiveChange(List<Shape> shapes, int size)
+        {
+			foreach (Shape item in shapes)
+            {
+				NumericSingleRecursiveChange(item, size);
+			}
+		}
+
+		private void NumericSingleRecursiveChange(Shape shape, int size)
         {
 			if (shape is GroupShape)
 			{
 				foreach (Shape item in shape.SubShape)
 				{
-					NumericRecursiveChange(item);
+					NumericSingleRecursiveChange(item, size);
 				}
 			}
-			shape.StrokeWidth = (int)numericUpDown1.Value;
+			shape.StrokeWidth = size;
 		}
 
 
@@ -314,6 +328,35 @@ namespace Draw
 					item.Targeted = false;
 				}
 			}
+		}
+
+        private void numericUpDown2_ValueChanged(object sender, EventArgs e)
+        {
+			if (dialogProcessor.Selection != null)
+			{
+				try
+				{
+					NumericSizeRecursiveChange(dialogProcessor.Selection);
+				}
+				catch (NullReferenceException)
+				{
+					Console.WriteLine("Nothing to change.");
+				}
+				viewPort.Invalidate();
+			}
+		}
+
+		private void NumericSizeRecursiveChange(Shape shape)
+		{
+			if (shape is GroupShape)
+			{
+				foreach (Shape item in shape.SubShape)
+				{
+					NumericSizeRecursiveChange(item);
+				}
+			}
+			shape.Width = shape.Width * (1+(int)numericUpDown1.Value/10);
+			shape.Height = shape.Height * (1 + (int)numericUpDown1.Value / 10);
 		}
 	}
 }
