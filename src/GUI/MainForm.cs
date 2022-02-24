@@ -372,11 +372,11 @@ namespace Draw
 				{
 					if (dialogProcessor.IsMultipleSelection)
 					{
-						NumericSizeMultipleRecursiveChange(dialogProcessor.MultipleSelection, (1+(int)numericUpDown2.Value/10));
+						NumericSizeMultipleRecursiveChange(dialogProcessor.MultipleSelection, (1+(float)numericUpDown2.Value/10));
 					}
 					else
 					{
-						NumericSizeSingleRecursiveChange(dialogProcessor.Selection, (1 + (int)numericUpDown2.Value / 10));
+						NumericSizeSingleRecursiveChange(dialogProcessor.Selection, (1 + (float)numericUpDown2.Value / 10));
 					}
 				}
 				catch (NullReferenceException)
@@ -387,7 +387,7 @@ namespace Draw
 			}
 		}
 
-		private void NumericSizeMultipleRecursiveChange(List<Shape> shapes, int size)
+		private void NumericSizeMultipleRecursiveChange(List<Shape> shapes, float size)
 		{
 			foreach (Shape item in shapes)
 			{
@@ -395,7 +395,7 @@ namespace Draw
 			}
 		}
 
-		private void NumericSizeSingleRecursiveChange(Shape shape, int size)
+		private void NumericSizeSingleRecursiveChange(Shape shape, float size)
 		{
 			if (shape is GroupShape)
 			{
