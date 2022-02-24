@@ -145,6 +145,10 @@ namespace Draw
 		{
 			dialogProcessor.AddNewGroup();
 
+			ResetMultipleSelection(dialogProcessor.MultipleSelection);
+
+			dialogProcessor.MultipleSelection = new List<Shape>();
+
 			statusBar.Items[0].Text = "Последно действие: Групиране на елементи.";
 
 			viewPort.Invalidate();
@@ -247,9 +251,21 @@ namespace Draw
         {
 			toolStripButton6.Checked = false;
 			dialogProcessor.IsMultipleSelection = false;
-			if (dialogProcessor.MultipleSelection.Count != 0)
+			ResetMultipleSelection(dialogProcessor.MultipleSelection);
+			dialogProcessor.MultipleSelection = new List<Shape>();
+			viewPort.Invalidate();
+		}
+
+		private void ResetMultipleSelection(List<Shape> shapes)
+        {
+			if (shapes.Count != 0)
 			{
-				foreach (Shape item in dialogProcessor.MultipleSelection) { 
+				foreach (Shape item in shapes)
+				{
+					if (item is GroupShape)
+                    {
+						ResetMultipleSelection(item.SubShape);
+                    }
 					if (item.ChangeColor == Color.Empty)
 					{
 						item.FillColor = dialogProcessor.DefaultFillColor;
@@ -261,10 +277,6 @@ namespace Draw
 					item.Targeted = false;
 				}
 			}
-			dialogProcessor.MultipleSelection = new List<Shape>();
-			viewPort.Invalidate();
 		}
-
-        
-    }
+	}
 }

@@ -180,8 +180,7 @@ namespace Draw
 				{
 					if (ShapeList[i] is GroupShape)
 					{
-						foreach (Shape item in ShapeList[i].SubShape)
-							item.FillColor = Color.Red;
+						RecursiveFillRed(ShapeList[i]);
 					}
 					else
 					{
@@ -195,18 +194,7 @@ namespace Draw
                         }
 						if (ShapeList[lastSelection] is GroupShape)
 						{
-							foreach (Shape item in ShapeList[lastSelection].SubShape)
-							{
-								if (item.ChangeColor == Color.Empty)
-								{
-									item.FillColor = defaultFillColor;
-								}
-								else
-								{
-									item.FillColor = item.ChangeColor;
-
-								}
-							}
+							ResetMultipleSelection(ShapeList[lastSelection].SubShape);
 						}
 						else
 						{
@@ -229,7 +217,41 @@ namespace Draw
 			}
 			return null;
 		}
-		
+
+		private void ResetMultipleSelection(List<Shape> shapes)
+		{
+			foreach (Shape item in shapes)
+			{
+				if (item is GroupShape)
+				{
+					ResetMultipleSelection(item.SubShape);
+				}
+				if (item.ChangeColor == Color.Empty)
+				{
+					item.FillColor = defaultFillColor;
+				}
+				else
+				{
+					item.FillColor = item.ChangeColor;
+				}
+			}
+		}
+
+		public void RecursiveFillRed(Shape shape)
+        {
+			foreach (Shape item in shape.SubShape)
+			{
+				if (item is GroupShape)
+				{
+					RecursiveFillRed(item);
+				}
+				else
+				{
+					item.FillColor = Color.Red;
+				}
+			}
+		}
+
 		/// <summary>
 		/// Транслация на избраният елемент на вектор определен от <paramref name="p>p</paramref>
 		/// </summary>
