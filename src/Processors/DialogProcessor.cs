@@ -178,36 +178,15 @@ namespace Draw
 			{
 				if (ShapeList[i].Contains(point))
 				{
-					if (ShapeList[i] is GroupShape)
-					{
-						RecursiveFillRed(ShapeList[i]);
-					}
-					else
-					{
-						ShapeList[i].FillColor = Color.Red;
-					}
+					RecursiveFillRed(ShapeList[i]);
 					if (isSelected == true && lastSelection != i && !isMultipleSelection)
 					{
 						if(lastSelection > ShapeList.Count - 1)
                         {
 							lastSelection = savedSelection;
                         }
-						if (ShapeList[lastSelection] is GroupShape)
-						{
-							ResetMultipleSelection(ShapeList[lastSelection].SubShape);
-						}
-						else
-						{
-							if (ShapeList[lastSelection].ChangeColor == Color.Empty)
-							{
-								ShapeList[lastSelection].FillColor = defaultFillColor;
-							}
-							else
-							{
-								ShapeList[lastSelection].FillColor = ShapeList[lastSelection].ChangeColor;
-
-							}
-						}
+						Console.WriteLine(lastSelection);
+						ResetMultipleSelection(ShapeList[lastSelection]);
 					}
 					isSelected = true;
 					lastSelection = i;
@@ -218,38 +197,35 @@ namespace Draw
 			return null;
 		}
 
-		private void ResetMultipleSelection(List<Shape> shapes)
+		private void ResetMultipleSelection(Shape shape)
 		{
-			foreach (Shape item in shapes)
+			if (shape is GroupShape)
 			{
-				if (item is GroupShape)
+				foreach (Shape item in shape.SubShape)
 				{
-					ResetMultipleSelection(item.SubShape);
+					ResetMultipleSelection(item);
 				}
-				if (item.ChangeColor == Color.Empty)
-				{
-					item.FillColor = defaultFillColor;
-				}
-				else
-				{
-					item.FillColor = item.ChangeColor;
-				}
+			}
+			if (shape.ChangeColor == Color.Empty)
+			{
+				shape.FillColor = defaultFillColor;
+			}
+			else
+			{
+				shape.FillColor = shape.ChangeColor;
 			}
 		}
 
 		public void RecursiveFillRed(Shape shape)
         {
-			foreach (Shape item in shape.SubShape)
+			if (shape is GroupShape)
 			{
-				if (item is GroupShape)
+				foreach (Shape item in shape.SubShape)
 				{
 					RecursiveFillRed(item);
 				}
-				else
-				{
-					item.FillColor = Color.Red;
-				}
 			}
+			shape.FillColor = Color.Red;
 		}
 
 		/// <summary>

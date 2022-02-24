@@ -256,22 +256,32 @@ namespace Draw
 			dialogProcessor.SavedSelection = dialogProcessor.LastSelection;
 			pickUpSpeedButton.Checked = false;
 			dialogProcessor.IsMultipleSelection = true;
-			if (dialogProcessor.Selection != null)
-			{
-				if (dialogProcessor.Selection.ChangeColor == Color.Empty)
-				{
-					dialogProcessor.Selection.FillColor = dialogProcessor.DefaultFillColor;
-				}
-				else
-				{
-					dialogProcessor.Selection.FillColor = dialogProcessor.Selection.ChangeColor;
-				}
-			}
+			ResetSingleSelection(dialogProcessor.Selection);
 			dialogProcessor.Selection = null;
 			viewPort.Invalidate();
 		}
 
-        private void pickUpSpeedButton_Click(object sender, EventArgs e)
+		private void ResetSingleSelection(Shape shape)
+		{
+			if (dialogProcessor.Selection != null)
+			{
+				if (shape is GroupShape)
+				{
+					ResetSingleSelection(shape);
+				}
+				if (shape.ChangeColor == Color.Empty)
+				{
+					shape.FillColor = dialogProcessor.DefaultFillColor;
+				}
+				else
+				{
+					shape.FillColor = dialogProcessor.Selection.ChangeColor;
+				}
+				
+			}
+		}
+
+		private void pickUpSpeedButton_Click(object sender, EventArgs e)
         {
 			toolStripButton6.Checked = false;
 			dialogProcessor.IsMultipleSelection = false;
