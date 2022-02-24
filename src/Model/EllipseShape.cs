@@ -33,10 +33,6 @@ namespace Draw
 
 			if (_xRadius <= 0.0 || _yRadius <= 0.0)
 				return false;
-			/* This is a more general form of the circle equation
-             *
-             * X^2/a^2 + Y^2/b^2 <= 1
-             */
 
 			PointF normalized = new PointF(point.X - center.X,
 										 point.Y - center.Y);
