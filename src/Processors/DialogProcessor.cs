@@ -144,20 +144,6 @@ namespace Draw
 			ShapeList.Add(point);
 		}
 
-		private int lastSelection;
-		public int LastSelection
-		{
-			get { return lastSelection; }
-			set { lastSelection = value; }
-		}
-		private int savedSelection;
-		public int SavedSelection
-		{
-			get { return savedSelection; }
-			set { savedSelection = value; }
-		}
-		private bool isSelected = false;
-
 		private bool isMultipleSelection = false;
 		public bool IsMultipleSelection
 		{
@@ -178,18 +164,13 @@ namespace Draw
 			{
 				if (ShapeList[i].Contains(point))
 				{
-					RecursiveFillRed(ShapeList[i]);
-					if (isSelected == true && lastSelection < i && !isMultipleSelection)
+					if (!isMultipleSelection)
 					{
-						if(lastSelection > ShapeList.Count - 1)
-                        {
-							lastSelection = savedSelection;
-                        }
-						Console.WriteLine(lastSelection);
-						ResetMultipleSelection(ShapeList[lastSelection]);
+						ResetSelection(ShapeList);
 					}
-					isSelected = true;
-					lastSelection = i;
+					RecursiveSelect(ShapeList[i]);
+					RecursiveFillRed(ShapeList[i]);
+					
 
 					return ShapeList[i];
 				}
@@ -197,23 +178,38 @@ namespace Draw
 			return null;
 		}
 
-		private void ResetMultipleSelection(Shape shape)
-		{
+		private void RecursiveSelect(Shape shape)
+        {
 			if (shape is GroupShape)
 			{
 				foreach (Shape item in shape.SubShape)
 				{
-					ResetMultipleSelection(item);
+					RecursiveSelect(item);
 				}
-				return;
 			}
-			if (shape.ChangeColor == Color.Empty)
+			shape.IsSelected = true;
+		}
+
+		private void ResetSelection(List<Shape> shapelist)
+		{
+			foreach (Shape item in shapelist)
 			{
-				shape.FillColor = defaultFillColor;
-			}
-			else
-			{
-				shape.FillColor = shape.ChangeColor;
+				if (item is GroupShape)
+				{
+					foreach (Shape shape in item.SubShape)
+					{
+						ResetSelection(shape.SubShape);
+					}
+				}
+				if (item.ChangeColor == Color.Empty)
+				{
+					item.FillColor = defaultFillColor;
+				}
+				else
+				{
+					item.FillColor = item.ChangeColor;
+				}
+				item.IsSelected = false;
 			}
 		}
 
@@ -247,10 +243,18 @@ namespace Draw
 				return;
 			}
 			if (multipleSelection.Count != 0)
-            {
-                foreach (Shape item in MultipleSelection)
-                    item.Location = new PointF(item.Location.X + p.X - lastLocation.X, item.Location.Y + p.Y - lastLocation.Y);
-				lastLocation = p;
+			{
+				foreach (Shape item in MultipleSelection)
+				{
+					if (item is GroupShape)
+					{
+						MoveGroupSelection(item, p);
+					}
+					else { 
+						item.Location = new PointF(item.Location.X + p.X - lastLocation.X, item.Location.Y + p.Y - lastLocation.Y);
+					}
+				}
+                lastLocation = p;
 				return;
 			}
         }

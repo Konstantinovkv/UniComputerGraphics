@@ -67,6 +67,13 @@ namespace Draw
 			set { targeted = value; }
 		}
 
+		private bool isSelected = false;
+		public virtual bool IsSelected
+		{
+			get { return isSelected; }
+			set { isSelected = value; }
+		}
+
 		/// <summary>
 		/// Горен ляв ъгъл на елемента.
 		/// </summary>

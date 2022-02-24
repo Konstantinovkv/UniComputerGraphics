@@ -253,7 +253,6 @@ namespace Draw
 
 		private void toolStripButton6_Click(object sender, EventArgs e)
 		{
-			dialogProcessor.SavedSelection = dialogProcessor.LastSelection;
 			pickUpSpeedButton.Checked = false;
 			dialogProcessor.IsMultipleSelection = true;
 			ResetSingleSelection(dialogProcessor.Selection);
@@ -280,7 +279,7 @@ namespace Draw
 				{
 					shape.FillColor = dialogProcessor.Selection.ChangeColor;
 				}
-				
+				shape.IsSelected = false;
 			}
 		}
 
@@ -302,7 +301,6 @@ namespace Draw
 					if (item is GroupShape)
                     {
 						ResetMultipleSelection(item.SubShape);
-						return;
                     }
 					if (item.ChangeColor == Color.Empty)
 					{
@@ -312,6 +310,7 @@ namespace Draw
 					{
 						item.FillColor = dialogProcessor.Selection.ChangeColor;
 					}
+					item.IsSelected = false;
 					item.Targeted = false;
 				}
 			}
