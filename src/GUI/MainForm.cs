@@ -162,19 +162,7 @@ namespace Draw
 				{
 					try
 					{
-						if (dialogProcessor.Selection is GroupShape)
-						{
-							foreach (Shape item in dialogProcessor.Selection.SubShape)
-							{
-								item.FillColor = colorDialog1.Color;
-								item.ChangeColor = colorDialog1.Color;
-							}
-						}
-						else
-						{
-							dialogProcessor.Selection.FillColor = colorDialog1.Color;
-							dialogProcessor.Selection.ChangeColor = colorDialog1.Color;
-						}
+						RecursiveColorChange(dialogProcessor.Selection);
 					}
 					catch (NullReferenceException)
 					{
@@ -185,7 +173,20 @@ namespace Draw
             }
         }
 
-        private void speedMenu_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+		private void RecursiveColorChange(Shape shape)
+		{
+			if (shape is GroupShape)
+			{
+				foreach (Shape item in shape.SubShape)
+				{
+					RecursiveColorChange(item);
+				}
+			}
+			shape.FillColor = colorDialog1.Color;
+			shape.ChangeColor = colorDialog1.Color;
+		}
+
+		private void speedMenu_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
 
 		}
@@ -196,15 +197,26 @@ namespace Draw
             {
 				try
 				{
-					dialogProcessor.Selection.StrokeWidth = (int)numericUpDown1.Value;
-					viewPort.Invalidate();
+					NumericRecursiveChange(dialogProcessor.Selection);
 				}
 				catch (NullReferenceException)
 				{
 					Console.WriteLine("Nothing to fill.");
 				}
+				viewPort.Invalidate();
 			}
+		}
 
+		private void NumericRecursiveChange(Shape shape)
+        {
+			if (shape is GroupShape)
+			{
+				foreach (Shape item in shape.SubShape)
+				{
+					NumericRecursiveChange(item);
+				}
+			}
+			shape.StrokeWidth = (int)numericUpDown1.Value;
 		}
 
 
@@ -216,7 +228,7 @@ namespace Draw
 				{
 					try
 					{
-						dialogProcessor.Selection.StrokeColor = colorDialog2.Color;
+						RecursiveStrokeColor(dialogProcessor.Selection);
 					}
 					catch (NullReferenceException)
 					{
@@ -225,6 +237,18 @@ namespace Draw
 					viewPort.Invalidate();
 				}
 			}
+		}
+
+		private void RecursiveStrokeColor(Shape shape)
+        {
+			if (shape is GroupShape)
+			{
+				foreach (Shape item in shape.SubShape)
+				{
+					RecursiveStrokeColor(item);
+				}
+			}
+			shape.StrokeColor = colorDialog2.Color;
 		}
 
 		private void toolStripButton6_Click(object sender, EventArgs e)
