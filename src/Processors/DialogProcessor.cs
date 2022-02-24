@@ -196,10 +196,27 @@ namespace Draw
 			{
 				if (item is GroupShape)
 				{
-					foreach (Shape shape in item.SubShape)
-					{
-						ResetSelection(shape.SubShape);
-					}
+					ResetGroup(item.SubShape);
+				}
+				if (item.ChangeColor == Color.Empty)
+				{
+					item.FillColor = defaultFillColor;
+				}
+				else
+				{
+					item.FillColor = item.ChangeColor;
+				}
+				item.IsSelected = false;
+			}
+		}
+
+		private void ResetGroup(List<Shape> shapes)
+        {
+			foreach (Shape item in shapes)
+			{
+				if (item is GroupShape)
+				{
+					ResetGroup(item.SubShape);
 				}
 				if (item.ChangeColor == Color.Empty)
 				{
