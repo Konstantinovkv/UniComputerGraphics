@@ -55,6 +55,7 @@
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
     <Compile Include="src\GUI\Program.cs" />
+    <Compile Include="src\Model\ComplexShape.cs" />
     <Compile Include="src\Model\EllipseShape.cs" />
     <Compile Include="src\Model\GroupShape.cs" />
     <Compile Include="src\Model\LineShape.cs" />

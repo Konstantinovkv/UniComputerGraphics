@@ -84,6 +84,21 @@ namespace Draw
 			ShapeList.Add(rect);
 		}
 
+		//Метод за изпита
+		public void AddRandomComplexShape()
+		{
+			Random rnd = new Random();
+			int x = rnd.Next(100, 1000);
+			int y = rnd.Next(100, 600);
+
+			ComplexShape compl = new ComplexShape(new Rectangle(x, y, 200, 100));
+			compl.FillColor = defaultFillColor;
+			compl.StrokeColor = defaultStrokeColor;
+			compl.StrokeWidth = 1;
+
+			ShapeList.Add(compl);
+		}
+
 		/// <summary>
 		/// Добавя примитив - елипса на произволно място върху клиентската област.
 		/// </summary>

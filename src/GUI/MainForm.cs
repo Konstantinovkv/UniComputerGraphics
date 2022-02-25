@@ -407,5 +407,15 @@ namespace Draw
 			shape.Width = shape.Width * size;
 			shape.Height = shape.Height * size;
 		}
-	}
+
+		//Метод за изпита
+        private void AddComplexShape(object sender, EventArgs e)
+        {
+			dialogProcessor.AddRandomComplexShape();
+
+			statusBar.Items[0].Text = "Последно действие: Рисуване на композитна форма.";
+
+			viewPort.Invalidate();
+		}
+    }
 }
